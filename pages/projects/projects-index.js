@@ -1,9 +1,40 @@
 import React from 'react';
+import { usePaginatedQuery } from "react-query";
 
-const ComponentName = ({}) => (
-    <div>
-        Hello from projects index
-    </div>
-)
+import Project from "../../components/Project";
 
-export default ComponentName;
+const fetchProjects = async (key) => {
+    const res = await fetch(`http://localhost:3001/projects`, {
+      headers: {
+        Authorization:
+          `Bearer ${process.env.BEARER_TOKEN}`,
+      },
+    });
+    return res.json();
+}
+
+const ProjectsIndex = () => {
+    console.log(process.env.BEARER_TOKEN)
+    const { resolvedData, latestData, status } = usePaginatedQuery(
+        ["projects"],
+        fetchProjects
+      );
+    
+      return (
+        <div>
+          {status === "loading" && <div>Loading data...</div>}
+          {status === "error" && <div>Error fetching data</div>}
+          {status === "success" && (
+            <>
+              <div>
+                {resolvedData.map((project) => (
+                  <Project key={project.id} project={project} />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      );
+}
+
+export default ProjectsIndex;
