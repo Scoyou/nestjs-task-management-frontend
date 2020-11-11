@@ -19,7 +19,7 @@ const TasksIndex = () => {
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
   };
-
+  
   const { resolvedData, latestData, status } = usePaginatedQuery(
     ["tasks"],
     fetchTasks
@@ -54,6 +54,7 @@ const TasksIndex = () => {
         value={searchTerm}
         onChange={handleChange}
       />
+    
       {status === "loading" && <div>Loading data...</div>}
       {status === "error" && <div>Error fetching data</div>}
       {status === "success" && (
