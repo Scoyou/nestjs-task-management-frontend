@@ -1,6 +1,7 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
 import ProjectBreadcrumb from "./ProjectBreadcrumb";
+import TaskPriorityDropdown from "./TaskPriorityDropdown";
 import TaskStatusDropdown from "./TaskStatusDropdown";
 
 const Task = ({ task }) => {
@@ -15,9 +16,10 @@ const Task = ({ task }) => {
             <p>{task.description}</p>
           </Grid.Column>
           <Grid.Column style={{ backgroundColor: "#add8e6" }} width={4}>
-            <p>{task.projectIdentifier}</p>
+            <p>Project: {task.projectIdentifier}</p>
+            <p>Assignee: {task.userId}</p>
             <TaskStatusDropdown task={task}/>
-            <p>{task.userId}</p>
+            <TaskPriorityDropdown task={task} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
