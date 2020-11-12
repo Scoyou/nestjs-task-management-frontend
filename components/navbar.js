@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Menu } from "semantic-ui-react";
 import Link from "next/link";
+import ProjectsDropdown from "./ProjectsDropdown";
 
 export default class MenuExampleBasic extends Component {
     // state = {};
@@ -32,15 +33,13 @@ export default class MenuExampleBasic extends Component {
           </Menu.Item>
         </Link>
 
-        <Link href="/projects/projects-index">
           <Menu.Item
             name="projects"
             //   active={activeItem === "projects"}
             //   onClick={this.handleItemClick}
           >
-            Projects
+            <ProjectsDropdown />
           </Menu.Item>
-        </Link>
       </Menu>
     );
   }

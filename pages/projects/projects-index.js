@@ -6,7 +6,7 @@ import Project from "../../components/Project";
 const fetchProjects = async (key) => {
   const res = await fetch(`http://localhost:3001/projects`, {
     headers: {
-      Authorization: `Bearer ${process.env.BEARER_TOKEN}`,
+      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxMjMiLCJpYXQiOjE2MDUxMjUzNTksImV4cCI6MTYwNTEyODk1OX0.6XZOqO4VMSbqrOc1CNqJ4Yj4aykbPfHiVjgoIEiILs8`,
     },
   });
   return res.json();

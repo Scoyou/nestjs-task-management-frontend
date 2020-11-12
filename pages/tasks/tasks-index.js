@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { usePaginatedQuery } from "react-query";
-import Task from "../../components/Task";
+// import Task from "../../components/Task";
+
+import TaskShowPage from './[pid]'
 import { Tab, Input } from "semantic-ui-react";
 
 const fetchTasks = async (key) => {
   const res = await fetch(`http://localhost:3001/tasks`, {
     headers: {
-      Authorization: `Bearer ${process.env.BEARER_TOKEN}`,
+      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxMjMiLCJpYXQiOjE2MDUxMzAxODMsImV4cCI6MTYwNTczNDk4M30.xR581PfgGwYPVnpxhFbKB2Stx0z6Um-ofJ_3h-6DIHA`,
     },
   });
   return res.json();
@@ -29,14 +31,14 @@ const TasksIndex = () => {
     resolvedData &&
     resolvedData.map((task) => ({
       menuItem: `${task.title}`,
-      render: () => <Task key={task.id} task={task} />,
+      render: () => <TaskShowPage key={task.id} task={task} />,
     }));
 
   const searchPanes =
     searchResults &&
     searchResults.map((task) => ({
       menuItem: `${task.title}`,
-      render: () => <Task key={task.id} task={task} />,
+      render: () => <TaskShowPage key={task.id} task={task} />,
     }));
 
   useEffect(() => {
