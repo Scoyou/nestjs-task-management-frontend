@@ -4,7 +4,6 @@ import Link from "next/link";
 import ProjectsDropdown from "./ProjectsDropdown";
 
 const Navbar = () => {
-    const [project, setProject] = useState('');
 
     // handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
@@ -12,11 +11,11 @@ const Navbar = () => {
       <Menu>
         <Link href="/">
           <Menu.Item
-            name="home"
+            name="dashboard"
             // active={activeItem === "home"}
             // onClick={this.handleItemClick}
           >
-            Home
+            Dashboard
           </Menu.Item>
         </Link>
 
@@ -29,14 +28,6 @@ const Navbar = () => {
             Tasks
           </Menu.Item>
         </Link>
-
-          <Menu.Item
-            name="projects"
-            //   active={activeItem === "projects"}
-            //   onClick={this.handleItemClick}
-          >
-            <ProjectsDropdown setProject={setProject}/>
-          </Menu.Item>
       </Menu>
     );
   }

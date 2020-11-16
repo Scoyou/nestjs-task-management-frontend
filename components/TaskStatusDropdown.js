@@ -4,7 +4,7 @@ import Select from "react-select";
 
 
 
-const TaskStatusDropdown = ({ task }) => {
+const TaskStatusDropdown = ({ task, refetch }) => {
     const [status, setStatus] = useState(task.status);
   const options = [
     { key: 1, label: "OPEN", value: "OPEN" },
@@ -22,7 +22,10 @@ const TaskStatusDropdown = ({ task }) => {
       data: {
         status: taskStatus,
       },
-    }).then(res => setStatus(res.data.status));
+    }).then(res => {
+      setStatus(res.data.status);
+      refetch()
+    });
   };
 
   const handleChange = (taskId) => (e) => {

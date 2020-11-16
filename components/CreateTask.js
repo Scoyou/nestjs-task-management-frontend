@@ -10,13 +10,12 @@ import axios from 'axios'
 import ProjectDropdown from './ProjectsDropdown'
 import SetPriorityDropdown from './SetPriorityDropdown'
 
-function CreateTaskPage(props) {
+const CreateTaskPage = (props) => {
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = useState('');
   const [project, setProject] = useState('');
-  const [priority, setPriority] = useState('PRESSING');
+  const [priority, setPriority] = useState('');
   const [description, setDescription] = useState('');
-  const [status, setStatus] = useState('OPEN');
 
   const createTask = async (title, project, priority, description, status) => {
     const res = await axios({
@@ -75,10 +74,6 @@ function CreateTaskPage(props) {
               <SetPriorityDropdown setPriority={setPriority} />
             </Form.Field>
             <Form.Field>
-              <label>Status</label>
-              Status
-            </Form.Field>
-            <Form.Field>
               <label>Description</label>
               <TextArea 
               value={description} 
@@ -89,7 +84,7 @@ function CreateTaskPage(props) {
           </Form>
       </Modal.Content>
       <Modal.Actions>
-        <Button onClick={handleSubmit(title, project, priority, description, status)} type="submit">Submit</Button>
+        <Button onClick={handleSubmit(title, project, priority, description)} type="submit">Submit</Button>
         <Button onClick={() => setOpen(false)}>Cancel</Button>
       </Modal.Actions>
     </Modal>

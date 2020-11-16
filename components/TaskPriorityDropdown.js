@@ -1,11 +1,9 @@
 import axios from "axios";
-import React, { useState,  } from "react";
+import React, { useState } from "react";
 import Select from "react-select";
 
-
-
-const TaskPriorityDropdown = ({ task }) => {
-    const [priority, setPriority] = useState(task.priority);
+const TaskPriorityDropdown = ({ task, refetch }) => {
+  const [priority, setPriority] = useState(task.priority);
   const options = [
     { key: 1, label: "CRITICAL", value: "CRITICAL" },
     { key: 2, label: "PRESSING", value: "PRESSING" },
@@ -22,7 +20,10 @@ const TaskPriorityDropdown = ({ task }) => {
       data: {
         priority: taskPriority,
       },
-    }).then(res => setPriority(res.data.priority));
+    }).then((res) => {
+      setPriority(res.data.priority);
+      refetch()
+    });
   };
 
   const handleChange = (taskId) => (e) => {
