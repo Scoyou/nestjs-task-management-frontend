@@ -3,6 +3,7 @@ import { Grid } from "semantic-ui-react";
 import ProjectBreadcrumb from "./ProjectBreadcrumb";
 import TaskPriorityDropdown from "./TaskPriorityDropdown";
 import TaskStatusDropdown from "./TaskStatusDropdown";
+import CommentsIndex from './CommentsIndex'
 
 const Task = ({ task }) => {
   return (
@@ -14,6 +15,8 @@ const Task = ({ task }) => {
           <Grid.Column width={10}>
             <h2>{task.title}</h2>
             <p>{task.description}</p>
+
+            <CommentsIndex key={task.id} task={task} />
           </Grid.Column>
           <Grid.Column style={{ backgroundColor: "#add8e6" }} width={4}>
             <p>Project: {task.projectIdentifier}</p>

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { usePaginatedQuery } from "react-query";
 // import Task from "../../components/Task";
+import CreateTaskPage from '../../components/CreateTask'
+import Task from '../../components/Task'
 
-import TaskShowPage from './[pid]'
 import { Tab, Input } from "semantic-ui-react";
 
 const fetchTasks = async (key) => {
@@ -22,7 +23,7 @@ const TasksIndex = () => {
     setSearchTerm(event.target.value);
   };
   
-  const { resolvedData, latestData, status } = usePaginatedQuery(
+  const { resolvedData, latestData, status, refetch } = usePaginatedQuery(
     ["tasks"],
     fetchTasks
   );
@@ -31,14 +32,14 @@ const TasksIndex = () => {
     resolvedData &&
     resolvedData.map((task) => ({
       menuItem: `${task.title}`,
-      render: () => <TaskShowPage key={task.id} task={task} />,
+      render: () => <Task key={task.id} task={task} />,
     }));
 
   const searchPanes =
     searchResults &&
     searchResults.map((task) => ({
       menuItem: `${task.title}`,
-      render: () => <TaskShowPage key={task.id} task={task} />,
+      render: () => <Task key={task.id} task={task} />,
     }));
 
   useEffect(() => {
@@ -51,11 +52,14 @@ const TasksIndex = () => {
 
   return (
     <div>
+      <div>
       <Input
         placeholder="Search for a task"
         value={searchTerm}
         onChange={handleChange}
       />
+      <CreateTaskPage refetch={refetch}/>
+      </div>
     
       {status === "loading" && <div>Loading data...</div>}
       {status === "error" && <div>Error fetching data</div>}

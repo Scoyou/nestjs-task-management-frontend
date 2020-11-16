@@ -8,10 +8,13 @@
     "start": "next start"
   },
   "dependencies": {
+    "@sentry/react": "^5.27.3",
+    "@sentry/tracing": "^5.27.3",
     "axios": "^0.21.0",
     "next": "10.0.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "react-icons": "^3.11.0",
     "react-query": "^2.26.2",
     "react-select": "^3.1.0",
     "semantic-ui-css": "^2.4.1",

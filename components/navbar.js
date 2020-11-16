@@ -1,15 +1,12 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Menu } from "semantic-ui-react";
 import Link from "next/link";
 import ProjectsDropdown from "./ProjectsDropdown";
 
-export default class MenuExampleBasic extends Component {
-    // state = {};
+const Navbar = () => {
+    const [project, setProject] = useState('');
 
     // handleItemClick = (e, { name }) => this.setState({ activeItem: name });
-
-  render() {
-    // const { activeItem } = this.state;
 
     return (
       <Menu>
@@ -38,9 +35,10 @@ export default class MenuExampleBasic extends Component {
             //   active={activeItem === "projects"}
             //   onClick={this.handleItemClick}
           >
-            <ProjectsDropdown />
+            <ProjectsDropdown setProject={setProject}/>
           </Menu.Item>
       </Menu>
     );
   }
-}
+
+  export default Navbar;
