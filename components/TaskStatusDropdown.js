@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
+import Cookies from 'js-cookie'
 
 
 
@@ -13,11 +14,12 @@ const TaskStatusDropdown = ({ task, refetch }) => {
   ];
 
   const updateTaskStatus = async (id, taskStatus) => {
+    const jwt  = Cookies.get('jwt')
     const res = await axios({
       method: "patch",
       url: `http://localhost:3001/tasks/${id}/status`,
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxMjMiLCJpYXQiOjE2MDUxMzAxODMsImV4cCI6MTYwNTczNDk4M30.xR581PfgGwYPVnpxhFbKB2Stx0z6Um-ofJ_3h-6DIHA`,
+        Authorization: `Bearer ${jwt}`,
       },
       data: {
         status: taskStatus,
