@@ -3,11 +3,13 @@ import { usePaginatedQuery } from "react-query";
 import { Button, Comment, Form, Header } from "semantic-ui-react";
 import axios from "axios";
 import TaskComment from "./TaskComment";
+import Cookies from 'js-cookie'
 
 const fetchComments = async (key, id) => {
+  const jwt = Cookies.get("jwt");
   const res = await axios(`http://localhost:3001/tasks/${id}`, {
     headers: {
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxMjMiLCJpYXQiOjE2MDUyMjQwODQsImV4cCI6MTYwNTgyODg4NH0.Sd9caewp8iU-zHh03dEGeD2dkxnDDJuDxgb1xd5Gg1I`,
+      Authorization: `Bearer ${jwt}`,
     },
   });
   return res.data;
@@ -32,11 +34,12 @@ const CommentsIndex = ({ task }) => {
   };
 
   const createComment = async (body, taskId) => {
+    const jwt = Cookies.get("jwt");
     const res = await axios({
       method: "post",
       url: "http://localhost:3001/comments",
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxMjMiLCJpYXQiOjE2MDUyMjQwODQsImV4cCI6MTYwNTgyODg4NH0.Sd9caewp8iU-zHh03dEGeD2dkxnDDJuDxgb1xd5Gg1I`,
+        Authorization: `Bearer ${jwt}`,
       },
       data: {
         body: body,
@@ -49,11 +52,12 @@ const CommentsIndex = ({ task }) => {
   };
 
   const deleteComment = async (id) => {
+    const jwt = Cookies.get("jwt");
     const res = await axios({
       method: "delete",
       url: `http://localhost:3001/comments/${id}`,
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxMjMiLCJpYXQiOjE2MDUyMjQwODQsImV4cCI6MTYwNTgyODg4NH0.Sd9caewp8iU-zHh03dEGeD2dkxnDDJuDxgb1xd5Gg1I`,
+        Authorization: `Bearer ${jwt}`,
       },
     }).then(() => {
       refetch();
@@ -82,8 +86,8 @@ const CommentsIndex = ({ task }) => {
                 />
               </Form>
               {latestData.comments.map((comment) => (
-                <div key={task.id}>
-                  <TaskComment comment={comment} delete={deleteComment}/>
+                <div key={comment.id}>
+                  <TaskComment comment={comment} delete={deleteComment} />
                 </div>
               ))}
             </Comment.Group>

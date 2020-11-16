@@ -5,16 +5,18 @@ import TaskPriorityDropdown from "./TaskPriorityDropdown";
 import TaskStatusDropdown from "./TaskStatusDropdown";
 import CommentsIndex from './CommentsIndex'
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
 
 const Task = ({ task, refetch }) => {
 
   const deleteTask = async (id) => {
+    const jwt  = Cookies.get('jwt')
     const res = await axios({
       method: "delete",
       url: `http://localhost:3001/tasks/${id}`,
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxMjMiLCJpYXQiOjE2MDUxMzAxODMsImV4cCI6MTYwNTczNDk4M30.xR581PfgGwYPVnpxhFbKB2Stx0z6Um-ofJ_3h-6DIHA`,
+        Authorization: `Bearer ${jwt}`,
       },
     }).then((res) => {
       refetch()

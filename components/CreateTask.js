@@ -6,6 +6,8 @@ import {
   TextArea,
 } from "semantic-ui-react";
 import axios from 'axios'
+import Cookies from 'js-cookie'
+
 
 import ProjectDropdown from './ProjectsDropdown'
 import SetPriorityDropdown from './SetPriorityDropdown'
@@ -18,11 +20,12 @@ const CreateTaskPage = (props) => {
   const [description, setDescription] = useState('');
 
   const createTask = async (title, project, priority, description, status) => {
+    const jwt  = Cookies.get('jwt')
     const res = await axios({
       method: "post",
       url: 'http://localhost:3001/tasks',
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxMjMiLCJpYXQiOjE2MDUyMjQwODQsImV4cCI6MTYwNTgyODg4NH0.Sd9caewp8iU-zHh03dEGeD2dkxnDDJuDxgb1xd5Gg1I`,
+        Authorization: `Bearer ${jwt}`,
       },
       data: {
         description: description,

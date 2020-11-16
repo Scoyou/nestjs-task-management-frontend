@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { usePaginatedQuery } from "react-query";
-// import Task from "../../components/Task";
 import CreateTaskPage from "../../components/CreateTask";
 import Task from "../../components/Task";
 
 import { Tab, Input } from "semantic-ui-react";
 import ProjectsDropdown from "../../components/ProjectsDropdown";
+import Cookies from 'js-cookie'
+
 
 const fetchTasks = async (key, project) => {
+  const jwt  = Cookies.get('jwt')
   const url =
     project === ""
       ? "http://localhost:3001/tasks"
       : `http://localhost:3001/tasks?projectIdentifier=${project}`;
   const res = await fetch(url, {
     headers: {
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxMjMiLCJpYXQiOjE2MDUxMzAxODMsImV4cCI6MTYwNTczNDk4M30.xR581PfgGwYPVnpxhFbKB2Stx0z6Um-ofJ_3h-6DIHA`,
+      Authorization: `Bearer ${jwt}`,
     },
   });
   return res.json();

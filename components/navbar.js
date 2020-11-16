@@ -1,35 +1,46 @@
 import React, { useState } from "react";
-import { Menu } from "semantic-ui-react";
+import { Menu, Button } from "semantic-ui-react";
 import Link from "next/link";
-import ProjectsDropdown from "./ProjectsDropdown";
+import SignInPage from "./SignInPage";
+import Cookies from "js-cookie";
+import SignUpPage from "./SignUpPage";
 
 const Navbar = () => {
+  const jwt = Cookies.get("jwt");
+  const [loggedIn, setLoggedIn] = useState(false);
 
-    // handleItemClick = (e, { name }) => this.setState({ activeItem: name });
-
-    return (
-      <Menu>
-        <Link href="/">
-          <Menu.Item
-            name="dashboard"
-            // active={activeItem === "home"}
-            // onClick={this.handleItemClick}
-          >
-            Dashboard
+  return (
+    <Menu>
+      {!jwt ? (
+        <>
+          <Menu.Item>
+            <SignInPage setLoggedIn={setLoggedIn} />
           </Menu.Item>
-        </Link>
-
-        <Link href="/tasks/tasks-index">
-          <Menu.Item
-            name="tasks"
-            // active={activeItem === "tasks"}
-            // onClick={this.handleItemClick}
-          >
-            Tasks
+          <Menu.Item>
+            <SignUpPage />
           </Menu.Item>
-        </Link>
-      </Menu>
-    );
-  }
+        </>
+      ) : (
+        <>
+          <Link href="/dashboard">
+            <Menu.Item name="dashboard">Dashboard</Menu.Item>
+          </Link>
 
-  export default Navbar;
+          <Link href="/tasks/tasks-index">
+            <Menu.Item name="tasks">Tasks</Menu.Item>
+          </Link>
+          <Button
+            onClick={() => {
+              Cookies.remove("jwt");
+              setLoggedIn(false);
+            }}
+          >
+            Sign Out
+          </Button>
+        </>
+      )}
+    </Menu>
+  );
+};
+
+export default Navbar;
