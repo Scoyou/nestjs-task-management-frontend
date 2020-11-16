@@ -4,23 +4,16 @@ import Link from "next/link";
 import SignInPage from "./SignInPage";
 import Cookies from "js-cookie";
 import SignUpPage from "./SignUpPage";
+import { useRouter } from 'next/router'
 
 const Navbar = () => {
+  const router = useRouter()
   const jwt = Cookies.get("jwt");
   const [loggedIn, setLoggedIn] = useState(false);
 
   return (
     <Menu>
-      {!jwt ? (
-        <>
-          <Menu.Item>
-            <SignInPage setLoggedIn={setLoggedIn} />
-          </Menu.Item>
-          <Menu.Item>
-            <SignUpPage />
-          </Menu.Item>
-        </>
-      ) : (
+      {jwt ? (
         <>
           <Link href="/dashboard">
             <Menu.Item name="dashboard">Dashboard</Menu.Item>
@@ -33,10 +26,20 @@ const Navbar = () => {
             onClick={() => {
               Cookies.remove("jwt");
               setLoggedIn(false);
+              router.push("/");
             }}
           >
             Sign Out
           </Button>
+        </>
+      ) : (
+        <>
+          <Menu.Item>
+            <SignInPage setLoggedIn={setLoggedIn} />
+          </Menu.Item>
+          <Menu.Item>
+            <SignUpPage />
+          </Menu.Item>
         </>
       )}
     </Menu>

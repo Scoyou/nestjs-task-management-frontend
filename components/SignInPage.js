@@ -52,9 +52,10 @@ const SignInPage = (props) => {
               onChange={(e) => setUsername(e.target.value)}
               />
             </Form.Field>
-            <Form.Field>
+            <Form.Field type='password'>
               <label>Password</label>
               <input 
+              type='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               />
