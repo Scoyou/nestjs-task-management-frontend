@@ -1,4 +1,4 @@
-import React, { useState, } from "react";
+import React, { useState } from "react";
 import { Menu, Button } from "semantic-ui-react";
 import Link from "next/link";
 import SignInPage from "./SignInPage";
@@ -12,9 +12,10 @@ const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(false);
 
   return (
-    
     <Menu>
-      <Menu.Item header>Tasky McTaskFace</Menu.Item>
+      <Link href="/">
+        <Menu.Item header>Tasky McTaskFace</Menu.Item>
+      </Link>
       {jwt ? (
         <>
           <Link href="/dashboard">
@@ -40,8 +41,8 @@ const Navbar = () => {
         <>
           <Menu.Item position="right">
             <SignInPage setLoggedIn={setLoggedIn} />
-            <div styles={{marginLeft: '10px'}}>
-            <SignUpPage />
+            <div styles={{ marginLeft: "10px" }}>
+              <SignUpPage />
             </div>
           </Menu.Item>
         </>
