@@ -10,8 +10,10 @@ const SignUpPage = (props) => {
   const [open, setOpen] = React.useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errors, setErrors] = useState("");
 
-  const login = async (username, password) => {
+  const signUp = async (username, password) => {
     const res = await axios({
       method: "post",
       url: 'http://localhost:3001/auth/signup',
@@ -19,15 +21,23 @@ const SignUpPage = (props) => {
         username,
         password
       },
-    }).then((res) => {
+    }).then(() => {
       setOpen(false)
+      setUsername('')
+      setPassword('')
+      setConfirmPassword('')
+      setErrors('')
+    }).catch((e) => {
+        setErrors(e.message)
     });
   };
 
 
   const handleSubmit = (username, password) => (e) => {
     e.preventDefault();
-    login(username, password)
+    if(confirmPassword === password) {
+        signUp(username, password)
+    }
   }
 
   return (
@@ -39,6 +49,7 @@ const SignUpPage = (props) => {
       trigger={<Button>Sign Up</Button>}
     >
       <Modal.Header>Sign Up</Modal.Header>
+      {errors && <p>{JSON.stringify(errors)}</p> }
       <Modal.Content>
           <Form>
             <Form.Field>
@@ -54,6 +65,19 @@ const SignUpPage = (props) => {
               type='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Field>
+            {confirmPassword === password ? 
+            <>
+            <p></p>
+            </> :
+            <p styles={{color: 'red'}}>Passwords do not match</p>}
+            <Form.Field type='password'>
+              <label>Confirm Password</label>
+              <input 
+              type='password'
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </Form.Field>
           </Form>

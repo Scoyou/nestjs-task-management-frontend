@@ -6,9 +6,11 @@ import {
 } from "semantic-ui-react";
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import { useRouter } from "next/router";
 
 
 const SignInPage = (props) => {
+  const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -32,6 +34,7 @@ const SignInPage = (props) => {
   const handleSubmit = (username, password) => (e) => {
     e.preventDefault();
     login(username, password)
+    router.push("/dashboard");
   }
 
   return (

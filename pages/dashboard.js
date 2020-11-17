@@ -1,23 +1,76 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
-import Cookies from 'js-cookie'
+import Head from "next/head";
+import styles from "../styles/Home.module.css";
+import Cookies from "js-cookie";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 
+const Dashboard = () => {
+  const jwt = Cookies.get("jwt");
+  const [user, setUser] = useState("");
+  const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [loadingTasks, setLoadingTasks] = useState(true);
+  const [loadingProjects, setLoadingProjects] = useState(true);
+  const [openTasks, setOpenTasks] = useState([]);
 
-const fetchTasks = async (key, project) => {
-    const jwt  = Cookies.get('jwt')
-    const url =
-      project === ""
-        ? "http://localhost:3001/tasks"
-        : `http://localhost:3001/tasks?projectIdentifier=${project}`;
+  const fetchTasks = async () => {
+    const url = "http://localhost:3001/tasks";
     const res = await fetch(url, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
-    });
-    return res.json();
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setTasks(data);
+        setLoadingTasks(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoadingTasks(false);
+      });
   };
 
- const Dashboard = () => {
+  const fetchProjects = async () => {
+    const res = await fetch(`http://localhost:3001/projects`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setProjects(data);
+        setLoadingProjects(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoadingProjects(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchTasks();
+    fetchProjects();
+  }, []);
+
+  function parseJwt(token) {
+    var base64Url = token.split(".")[1];
+    var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    var jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+
+    return JSON.parse(jsonPayload);
+  }
+
+  useEffect(() => {
+    jwt && setUser(parseJwt(jwt).username);
+  });
+
   return (
     <div className={styles.container}>
       <Head>
@@ -26,57 +79,11 @@ const fetchTasks = async (key, project) => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-            Dashboard
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+        <h1 className={styles.title}>Welcome, {user}!</h1>
+        <h1>You have {projects.length} open projects</h1>
+        <h1>You have {tasks.length} tasks</h1>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
     </div>
-  )
-}
+  );
+};
 export default Dashboard;
