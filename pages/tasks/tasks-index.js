@@ -5,30 +5,29 @@ import Task from "../../components/Task";
 
 import { Tab, Input } from "semantic-ui-react";
 import ProjectsDropdown from "../../components/ProjectsDropdown";
-import Cookies from 'js-cookie'
-
-
-const fetchTasks = async (key, project) => {
-  const jwt  = Cookies.get('jwt')
-  const url =
-    project === ""
-      ? "http://localhost:3001/tasks"
-      : `http://localhost:3001/tasks?projectIdentifier=${project}`;
-  const res = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${jwt}`,
-    },
-  });
-  return res.json();
-};
+import Cookies from "js-cookie";
 
 const TasksIndex = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState("");
   const [project, setProject] = useState("");
+  const jwt = Cookies.get("jwt");
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
+  };
+
+  const fetchTasks = async (key, project) => {
+    const url =
+      project === ""
+        ? "http://localhost:3001/tasks"
+        : `http://localhost:3001/tasks?projectIdentifier=${project}`;
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    return res.json();
   };
 
   const { resolvedData, latestData, status, refetch } = usePaginatedQuery(
@@ -67,7 +66,7 @@ const TasksIndex = () => {
           placeholder="Search for a task"
           value={searchTerm}
           onChange={handleChange}
-          style={{marginLeft: '10px'}}
+          style={{ marginLeft: "10px" }}
         />
         <CreateTaskPage refetch={refetch} />
       </div>

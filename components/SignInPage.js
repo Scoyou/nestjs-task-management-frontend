@@ -34,7 +34,7 @@ const SignInPage = (props) => {
   const handleSubmit = (username, password) => (e) => {
     e.preventDefault();
     login(username, password)
-    router.push("/dashboard");
+    router.push("/tasks/tasks-index");
   }
 
   return (
