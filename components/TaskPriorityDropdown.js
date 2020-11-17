@@ -1,10 +1,14 @@
-import axios from "axios";
 import React, { useState } from "react";
 import Select from "react-select";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
+import api from "../services/api";
 
 const TaskPriorityDropdown = ({ task, refetch }) => {
   const [priority, setPriority] = useState(task.priority);
+
+  const jwt = Cookies.get("jwt");
+  api.defaults.headers.Authorization = `Bearer ${jwt}`;
+
   const options = [
     { key: 1, label: "CRITICAL", value: "CRITICAL" },
     { key: 2, label: "PRESSING", value: "PRESSING" },
@@ -12,19 +16,9 @@ const TaskPriorityDropdown = ({ task, refetch }) => {
   ];
 
   const updateTaskPriority = async (id, taskPriority) => {
-    const jwt  = Cookies.get('jwt')
-    const res = await axios({
-      method: "patch",
-      url: `http://localhost:3001/tasks/${id}/priority`,
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-      data: {
-        priority: taskPriority,
-      },
-    }).then((res) => {
+    const res = await api.patch(`tasks/${id}/priority`).then((res) => {
       setPriority(res.data.priority);
-      refetch()
+      refetch();
     });
   };
 

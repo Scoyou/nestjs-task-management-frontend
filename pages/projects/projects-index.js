@@ -1,21 +1,19 @@
 import React from "react";
 import { usePaginatedQuery } from "react-query";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 
-
+import api from "../../services/api";
 import Project from "../../components/Project";
 
-const fetchProjects = async (key) => {
-  const jwt  = Cookies.get('jwt')
-  const res = await fetch(`http://localhost:3001/projects`, {
-    headers: {
-      Authorization: `Bearer ${jwt}`,
-    },
-  });
-  return res.json();
-};
-
 const ProjectsIndex = () => {
+  const jwt = Cookies.get("jwt");
+  api.defaults.headers.Authorization = `Bearer ${jwt}`;
+
+  const fetchProjects = async (key) => {
+    const res = await api.get("projects");
+    return res.data;
+  };
+
   const { resolvedData, latestData, status } = usePaginatedQuery(
     ["projects"],
     fetchProjects

@@ -2,6 +2,7 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Cookies from "js-cookie";
 import React, { useState, useEffect, useLayoutEffect } from "react";
+import api from "../services/api";
 
 const Dashboard = () => {
   const jwt = Cookies.get("jwt");
@@ -11,15 +12,12 @@ const Dashboard = () => {
   const [loadingTasks, setLoadingTasks] = useState(true);
   const [loadingProjects, setLoadingProjects] = useState(true);
   const [openTasks, setOpenTasks] = useState([]);
+  api.defaults.headers.Authorization = `Bearer ${jwt}`
 
   const fetchTasks = async () => {
-    const url = "http://localhost:3001/tasks";
-    const res = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    })
-      .then((res) => res.json())
+    const url = "tasks";
+    const res = await api.get(url)
+      .then((res) => res.data)
       .then((data) => {
         setTasks(data);
         setLoadingTasks(false);
@@ -31,12 +29,8 @@ const Dashboard = () => {
   };
 
   const fetchProjects = async () => {
-    const res = await fetch(`http://localhost:3001/projects`, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    })
-      .then((res) => res.json())
+    const res = await api.get('projects')
+      .then((res) => res.data)
       .then((data) => {
         setProjects(data);
         setLoadingProjects(false);

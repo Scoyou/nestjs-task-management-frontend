@@ -1,12 +1,14 @@
-import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Select from "react-select";
-import Cookies from 'js-cookie'
-
-
+import Cookies from "js-cookie";
+import api from "../services/api";
 
 const TaskStatusDropdown = ({ task, refetch }) => {
-    const [status, setStatus] = useState(task.status);
+  const jwt = Cookies.get("jwt");
+  api.defaults.headers.Authorization = `Bearer ${jwt}`;
+
+  const [status, setStatus] = useState(task.status);
+
   const options = [
     { key: 1, label: "OPEN", value: "OPEN" },
     { key: 2, label: "IN PROGRESS", value: "IN_PROGRESS" },
@@ -14,19 +16,9 @@ const TaskStatusDropdown = ({ task, refetch }) => {
   ];
 
   const updateTaskStatus = async (id, taskStatus) => {
-    const jwt  = Cookies.get('jwt')
-    const res = await axios({
-      method: "patch",
-      url: `http://localhost:3001/tasks/${id}/status`,
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-      data: {
-        status: taskStatus,
-      },
-    }).then(res => {
+    const res = await api.patch(`tasks/${id}/status`).then((res) => {
       setStatus(res.data.status);
-      refetch()
+      refetch();
     });
   };
 

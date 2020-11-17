@@ -4,19 +4,15 @@ import ProjectBreadcrumb from "./ProjectBreadcrumb";
 import TaskPriorityDropdown from "./TaskPriorityDropdown";
 import TaskStatusDropdown from "./TaskStatusDropdown";
 import CommentsIndex from "./CommentsIndex";
-import axios from "axios";
 import Cookies from "js-cookie";
+import api from "../services/api";
 
 const Task = ({ task, refetch }) => {
+  const jwt = Cookies.get("jwt");
+  api.defaults.headers.Authorization = `Bearer ${jwt}`;
+
   const deleteTask = async (id) => {
-    const jwt = Cookies.get("jwt");
-    const res = await axios({
-      method: "delete",
-      url: `http://localhost:3001/tasks/${id}`,
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    }).then((res) => {
+    const res = await api.delete(`tasks/${id}`).then((res) => {
       refetch();
     });
   };
@@ -37,7 +33,7 @@ const Task = ({ task, refetch }) => {
             <Grid.Column width={10}>
               <h2>{task.title}</h2>
 
-              <p style={{minHeight: '250px'}}>{task.description}</p>
+              <p style={{ minHeight: "250px" }}>{task.description}</p>
 
               <CommentsIndex key={task.id} task={task} />
             </Grid.Column>
@@ -49,10 +45,7 @@ const Task = ({ task, refetch }) => {
 
               <hr></hr>
               <h3>Danger Zone</h3>
-              <Button 
-              negative 
-              onClick={() => deleteTask(task.id)}
-              >
+              <Button negative onClick={() => deleteTask(task.id)}>
                 Delete Task
               </Button>
             </Grid.Column>

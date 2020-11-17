@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { usePaginatedQuery } from "react-query";
 import { Button, Comment, Form, Header } from "semantic-ui-react";
-import axios from "axios";
 import TaskComment from "./TaskComment";
-import Cookies from 'js-cookie'
-
-const fetchComments = async (key, id) => {
-  const jwt = Cookies.get("jwt");
-  const res = await axios(`http://localhost:3001/tasks/${id}`, {
-    headers: {
-      Authorization: `Bearer ${jwt}`,
-    },
-  });
-  return res.data;
-};
+import Cookies from "js-cookie";
+import api from "../services/api";
 
 const CommentsIndex = ({ task }) => {
+  const jwt = Cookies.get("jwt");
+  api.defaults.headers.Authorization = `Bearer ${jwt}`;
+
   const [newComment, setNewComment] = useState("");
+
+  const fetchComments = async (key, id) => {
+    const res = await api.get(`tasks/${id}`);
+    return res.data;
+  };
 
   const { resolvedData, status, refetch, latestData } = usePaginatedQuery(
     ["projects", task.id],
@@ -34,32 +32,20 @@ const CommentsIndex = ({ task }) => {
   };
 
   const createComment = async (body, taskId) => {
-    const jwt = Cookies.get("jwt");
-    const res = await axios({
-      method: "post",
-      url: "http://localhost:3001/comments",
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-      data: {
-        body: body,
-        taskId: taskId,
-      },
-    }).then(() => {
-      setNewComment("");
-      refetch();
-    });
+    const res = await api
+      .post("comments", {
+        body,
+        taskId,
+      })
+      .then(() => {
+        setNewComment("");
+        refetch();
+      });
   };
 
   const deleteComment = async (id) => {
     const jwt = Cookies.get("jwt");
-    const res = await axios({
-      method: "delete",
-      url: `http://localhost:3001/comments/${id}`,
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    }).then(() => {
+    const res = await api.delete(`comments/${id}`).then(() => {
       refetch();
     });
   };

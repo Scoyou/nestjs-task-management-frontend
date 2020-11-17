@@ -6,12 +6,14 @@ import Task from "../../components/Task";
 import { Tab, Input } from "semantic-ui-react";
 import ProjectsDropdown from "../../components/ProjectsDropdown";
 import Cookies from "js-cookie";
+import api from '../../services/api'
 
 const TasksIndex = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState("");
   const [project, setProject] = useState("");
   const jwt = Cookies.get("jwt");
+  api.defaults.headers.Authorization = `Bearer ${jwt}`
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
@@ -22,12 +24,8 @@ const TasksIndex = () => {
       project === ""
         ? "http://localhost:3001/tasks"
         : `http://localhost:3001/tasks?projectIdentifier=${project}`;
-    const res = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    });
-    return res.json();
+    const res = await api.get(url)
+    return res.data;
   };
 
   const { resolvedData, latestData, status, refetch } = usePaginatedQuery(
