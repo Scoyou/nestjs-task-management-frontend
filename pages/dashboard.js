@@ -1,8 +1,23 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import Link from 'next/link'
+import Cookies from 'js-cookie'
 
-export default function Home() {
+
+const fetchTasks = async (key, project) => {
+    const jwt  = Cookies.get('jwt')
+    const url =
+      project === ""
+        ? "http://localhost:3001/tasks"
+        : `http://localhost:3001/tasks?projectIdentifier=${project}`;
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    return res.json();
+  };
+
+ const Dashboard = () => {
   return (
     <div className={styles.container}>
       <Head>
@@ -12,7 +27,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Learn <a href="https://nextjs.org">Next.js!</a>
+            Dashboard
         </h1>
 
         <p className={styles.description}>
@@ -64,3 +79,4 @@ export default function Home() {
     </div>
   )
 }
+export default Dashboard;
