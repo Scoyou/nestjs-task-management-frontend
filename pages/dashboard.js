@@ -15,8 +15,7 @@ const Dashboard = () => {
   api.defaults.headers.Authorization = `Bearer ${jwt}`
 
   const fetchTasks = async () => {
-    const url = "tasks";
-    const res = await api.get(url)
+    const res = await api.get('tasks')
       .then((res) => res.data)
       .then((data) => {
         setTasks(data);
