@@ -7,7 +7,7 @@ const SignUpPage = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState("");
+  const [errors, setErrors] = useState([]);
 
   const signUp = async (username, password) => {
     const res = await api
@@ -20,7 +20,7 @@ const SignUpPage = (props) => {
         setErrors("");
       })
       .catch((e) => {
-        setErrors(e.message);
+        setErrors([e.response.data.message]);
       });
   };
 
@@ -33,14 +33,23 @@ const SignUpPage = (props) => {
 
   return (
     <Modal
-      onClose={() => setOpen(false)}
+      onClose={() => {
+        setOpen(false);
+      }}
       onOpen={() => setOpen(true)}
       closeOnDimmerClick={false}
       open={open}
       trigger={<Button>Sign Up</Button>}
     >
       <Modal.Header>Sign Up</Modal.Header>
-      {errors && <p>{JSON.stringify(errors)}</p>}
+      {console.log(errors)}
+      {errors &&
+        errors.map((e) => (
+          <ul>
+            <li style={{ color: "red" }}>{e}</li>
+            <br />
+          </ul>
+        ))}
       <Modal.Content>
         <Form>
           <Form.Field>
@@ -60,10 +69,10 @@ const SignUpPage = (props) => {
           </Form.Field>
           {confirmPassword === password ? (
             <>
-              <p></p>
+              <></>
             </>
           ) : (
-            <p styles={{ color: "red" }}>Passwords do not match</p>
+            <p style={{ color: "red" }}>Passwords do not match</p>
           )}
           <Form.Field type="password">
             <label>Confirm Password</label>
@@ -79,7 +88,17 @@ const SignUpPage = (props) => {
         <Button onClick={handleSubmit(username, password)} type="submit">
           Submit
         </Button>
-        <Button onClick={() => setOpen(false)}>Cancel</Button>
+        <Button
+          onClick={() => {
+            setOpen(false);
+            setUsername("");
+            setPassword("");
+            setConfirmPassword("");
+            setErrors("");
+          }}
+        >
+          Cancel
+        </Button>
       </Modal.Actions>
     </Modal>
   );

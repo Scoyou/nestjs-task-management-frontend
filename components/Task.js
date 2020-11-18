@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Grid, Button } from "semantic-ui-react";
 import ProjectBreadcrumb from "./ProjectBreadcrumb";
 import TaskPriorityDropdown from "./TaskPriorityDropdown";
@@ -8,6 +8,8 @@ import Cookies from "js-cookie";
 import api from "../services/api";
 
 const Task = ({ task, refetch }) => {
+  const [editing, setEditing] = useState(false);
+
   const jwt = Cookies.get("jwt");
   api.defaults.headers.Authorization = `Bearer ${jwt}`;
 

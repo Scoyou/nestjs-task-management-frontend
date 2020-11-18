@@ -15,11 +15,13 @@ const TaskStatusDropdown = ({ task, refetch }) => {
     { key: 3, label: "DONE", value: "DONE" },
   ];
 
-  const updateTaskStatus = async (id, taskStatus) => {
-    const res = await api.patch(`tasks/${id}/status`).then((res) => {
-      setStatus(res.data.status);
-      refetch();
-    });
+  const updateTaskStatus = async (id, status) => {
+    const res = await api
+      .patch(`tasks/${id}/status`, { status })
+      .then((res) => {
+        setStatus(res.data.status);
+        refetch();
+      });
   };
 
   const handleChange = (taskId) => (e) => {

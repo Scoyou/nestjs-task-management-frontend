@@ -14,6 +14,8 @@ const CreateTaskPage = (props) => {
   const [project, setProject] = useState("");
   const [priority, setPriority] = useState("");
   const [description, setDescription] = useState("");
+  const [errors, setErrors] = useState([]);
+  
   const jwt = Cookies.get("jwt");
   api.defaults.headers.Authorization = `Bearer ${jwt}`;
 
@@ -62,7 +64,9 @@ const CreateTaskPage = (props) => {
           </Form.Field>
           <Form.Field>
             <label>Description</label>
-            <SunEditor onChange={(content) => setDescription(content)} />
+            <SunEditor 
+            height="300"
+            onChange={(content) => setDescription(content)} />
           </Form.Field>
         </Form>
       </Modal.Content>

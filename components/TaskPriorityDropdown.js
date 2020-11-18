@@ -15,11 +15,13 @@ const TaskPriorityDropdown = ({ task, refetch }) => {
     { key: 3, label: "MAINTENANCE", value: "MAINTENANCE" },
   ];
 
-  const updateTaskPriority = async (id, taskPriority) => {
-    const res = await api.patch(`tasks/${id}/priority`).then((res) => {
-      setPriority(res.data.priority);
-      refetch();
-    });
+  const updateTaskPriority = async (id, priority) => {
+    const res = await api
+      .patch(`tasks/${id}/priority`, { priority })
+      .then((res) => {
+        setPriority(res.data.priority);
+        refetch();
+      });
   };
 
   const handleChange = (taskId) => (e) => {
