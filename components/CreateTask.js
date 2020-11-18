@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 import ProjectDropdown from "./ProjectsDropdown";
 import SetPriorityDropdown from "./SetPriorityDropdown";
 import api from "../services/api";
+import SunEditor from "suneditor-react";
+import "suneditor/dist/css/suneditor.min.css";
 
 const CreateTaskPage = (props) => {
   const [open, setOpen] = React.useState(false);
@@ -60,11 +62,7 @@ const CreateTaskPage = (props) => {
           </Form.Field>
           <Form.Field>
             <label>Description</label>
-            <TextArea
-              value={description}
-              style={{ minHeight: 400 }}
-              onChange={(e) => setDescription(e.target.value)}
-            />
+            <SunEditor onChange={(content) => setDescription(content)} />
           </Form.Field>
         </Form>
       </Modal.Content>

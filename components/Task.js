@@ -33,7 +33,10 @@ const Task = ({ task, refetch }) => {
             <Grid.Column width={10}>
               <h2>{task.title}</h2>
 
-              <p style={{ minHeight: "250px" }}>{task.description}</p>
+              <div 
+              dangerouslySetInnerHTML={{ __html: task.description }}
+              style={{minHeight: '250px'}}
+              ></div>
 
               <CommentsIndex key={task.id} task={task} />
             </Grid.Column>
