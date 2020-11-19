@@ -112,8 +112,13 @@ const Dashboard = () => {
         </div>
         <h1>
           You have {tasks.filter((t) => t.status === "OPEN").length} open tasks
-          and {tasks.filter((t) => t.priority === "CRITICAL").length} critical
-          tasks
+          and{" "}
+          {
+            tasks.filter(
+              (t) => t.priority === "CRITICAL" && t.status !== "DONE"
+            ).length
+          }{" "}
+          open critical tasks
         </h1>
         <Divider />
         <div>

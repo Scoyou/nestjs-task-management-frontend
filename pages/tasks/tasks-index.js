@@ -3,7 +3,7 @@ import { usePaginatedQuery } from "react-query";
 import CreateTaskPage from "../../components/CreateTask";
 import Task from "../../components/Task";
 
-import { Tab, Input, Segment } from "semantic-ui-react";
+import { Tab, Input, Segment, Header } from "semantic-ui-react";
 import ProjectsDropdown from "../../components/ProjectsDropdown";
 import Cookies from "js-cookie";
 import api from "../../services/api";
@@ -77,10 +77,13 @@ const TasksIndex = () => {
       {status === "error" && <div>Error fetching data</div>}
       {status === "success" && (
         <>
-          <Tab
+          {resolvedData.length !== 0 ? <Tab
             menu={{ fluid: true, vertical: true, tabular: true }}
             panes={searchResults ? searchPanes : noSearchPanes}
           />
+          :
+          <div style={{textAlign: 'center'}}><Header>No tasks created for this project yet ☹️</Header></div>
+        }
         </>
       )}
     </div>

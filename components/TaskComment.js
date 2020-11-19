@@ -12,7 +12,9 @@ const TaskComment = (props) => (
           {moment(props.comment.createdAt).format("MMMM Do YYYY, h:mm:ss a")}
         </div>
       </Comment.Metadata>
-      <Comment.Text>{props.comment.body}</Comment.Text>
+      <Comment.Text
+        dangerouslySetInnerHTML={{ __html: props.comment.body }}
+      ></Comment.Text>
     </Comment.Content>
     <button onClick={() => props.delete(props.comment.id)}>Delete</button>
   </Comment>

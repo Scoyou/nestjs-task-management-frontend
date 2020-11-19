@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid, Button, Container, Divider } from "semantic-ui-react";
+import { Grid, Button, Container, Divider, Confirm } from "semantic-ui-react";
 import Cookies from "js-cookie";
 import ContentEditable from "react-contenteditable";
 import SunEditor from "suneditor-react";
@@ -16,6 +16,7 @@ const Task = ({ task, refetch }) => {
   const [timeout, setTimeout] = useState(0);
   const [editingDescription, setEditingDescription] = useState(false);
   const [newDescription, setnewDescription] = useState("");
+  const [openConfirmation, setOpenConfirmation] = useState(false);
 
   const jwt = Cookies.get("jwt");
   api.defaults.headers.Authorization = `Bearer ${jwt}`;
@@ -70,7 +71,7 @@ const Task = ({ task, refetch }) => {
         <Grid style={{ flex: "1" }}>
           <Grid.Row>
             <Grid.Column width={10}>
-              <h2>
+              <h2 style={{ cursor: "pointer" }}>
                 <ContentEditable
                   html={title}
                   disabled={false}
@@ -81,7 +82,7 @@ const Task = ({ task, refetch }) => {
               <p>
                 <strong>Description:</strong>
               </p>
-              <Container textAlign="justified" style={{ minHeight: "250px" }}>
+              <Container textAlign="justified" style={{ minHeight: "400px" }}>
                 {!editingDescription && (
                   <div
                     dangerouslySetInnerHTML={{ __html: task.description }}
@@ -94,11 +95,24 @@ const Task = ({ task, refetch }) => {
                     <SunEditor
                       setContents={task.description}
                       onChange={(content) => setnewDescription(content)}
+                      height="300"
+                      autoFocus={true}
                     />
-                    <Button onClick={handleSubmit(task.id, newDescription)}>
-                      Save
-                    </Button>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button
+                      onClick={handleSubmit(task.id, newDescription)}
+                      content="Save"
+                      labelPosition="left"
+                      icon="edit"
+                      primary
+                    />
+
+                    <Button
+                      onClick={handleClose}
+                      content="Cancel"
+                      labelPosition="left"
+                      icon="trash"
+                      negative
+                    />
                   </div>
                 ) : (
                   <></>
@@ -115,9 +129,23 @@ const Task = ({ task, refetch }) => {
 
               <Divider />
               <h3>Danger Zone</h3>
-              <Button negative onClick={() => deleteTask(task.id)}>
-                Delete Task
-              </Button>
+              <Button
+                content="Delete Task"
+                labelPosition="left"
+                icon="trash"
+                negative
+                onClick={() => setOpenConfirmation(true)}
+              />
+              <Confirm
+                open={openConfirmation}
+                onCancel={() => setOpenConfirmation(false)}
+                onConfirm={() => {
+                  deleteTask(task.id)
+                  setOpenConfirmation(false)
+                }}
+                confirmButton="Delete Task"
+                content={`Are you sure you want to delete ${task.title}?`}
+              />
             </Grid.Column>
           </Grid.Row>
         </Grid>

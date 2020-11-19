@@ -16,7 +16,7 @@ const SetPriorityDropdown = (props) => {
     <>
       <Menu compact>
         <Dropdown
-          text={options.label}
+          text={options.value}
           options={options}
           onChange={handleChange}
           simple

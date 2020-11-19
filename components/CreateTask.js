@@ -29,6 +29,9 @@ const CreateTaskPage = (props) => {
         setPriority("");
         setOpen(false);
         props.refetch();
+      })
+      .catch((e) => {
+        setErrors([e.response.data.message]);
       });
   };
 
@@ -48,6 +51,7 @@ const CreateTaskPage = (props) => {
       trigger={<Button>Create Task</Button>}
     >
       <Modal.Header>Create new task</Modal.Header>
+      {errors && <p style={{color: 'red'}}>{errors}</p>}
       <Modal.Content>
         <Form>
           <Form.Field>
@@ -64,9 +68,10 @@ const CreateTaskPage = (props) => {
           </Form.Field>
           <Form.Field>
             <label>Description</label>
-            <SunEditor 
-            height="300"
-            onChange={(content) => setDescription(content)} />
+            <SunEditor
+              height="300"
+              onChange={(content) => setDescription(content)}
+            />
           </Form.Field>
         </Form>
       </Modal.Content>
