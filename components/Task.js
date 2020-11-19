@@ -35,8 +35,11 @@ const Task = ({ task, refetch }) => {
             <Grid.Column width={10}>
               <h2>{task.title}</h2>
               <Divider />
-              <p><strong>Description:</strong></p>
+              <p>
+                <strong>Description:</strong>
+              </p>
               <Container
+                textAlign="justified"
                 dangerouslySetInnerHTML={{ __html: task.description }}
                 style={{ minHeight: "250px" }}
               ></Container>

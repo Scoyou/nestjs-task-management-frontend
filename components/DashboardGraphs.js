@@ -6,7 +6,8 @@ const DashboardGraphs = ({ tasks }) => {
   return (
     <Grid columns={2}>
       <Grid.Row>
-        <Grid.Column>
+        <Grid.Column mobile={16} tablet={8} computer={8}>
+          <h4 style={{ textAlign: "center" }}>Status</h4>
           <PieChart
             animate={true}
             paddingAngle={5}
@@ -30,7 +31,8 @@ const DashboardGraphs = ({ tasks }) => {
             ]}
           />
         </Grid.Column>
-        <Grid.Column>
+        <Grid.Column mobile={16} tablet={8} computer={8}>
+          <h4 style={{ textAlign: "center" }}>Priority</h4>
           <PieChart
             animate={true}
             radius={40}

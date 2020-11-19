@@ -3,7 +3,7 @@ import styles from "../styles/Home.module.css";
 import Cookies from "js-cookie";
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import api from "../services/api";
-import { Card, Grid, Segment } from "semantic-ui-react";
+import { Grid, Segment, Divider } from "semantic-ui-react";
 import Link from "next/link";
 import TaskCard from "../components/TaskCard";
 import DashboardGraphs from "../components/DashboardGraphs";
@@ -16,11 +16,12 @@ const Dashboard = () => {
   const [loadingTasks, setLoadingTasks] = useState(true);
   const [loadingProjects, setLoadingProjects] = useState(true);
   const [openTasks, setOpenTasks] = useState([]);
+
   api.defaults.headers.Authorization = `Bearer ${jwt}`;
 
   const fetchTasks = async () => {
     const res = await api
-      .get("tasks")
+      .get('tasks')
       .then((res) => res.data)
       .then((data) => {
         setTasks(data);
@@ -82,19 +83,19 @@ const Dashboard = () => {
           <h1 className={styles.title}>Welcome, {user}!</h1>
           <h2>Recent Tasks</h2>
           <Segment color="green">
-            <Grid columns={tasks.length < 5 ? tasks.length : 5} divided>
+            <Grid columns={tasks.length < 4 ? tasks.length : 4} divided>
               <Grid.Row>
-                {tasks.length <= 5
+                {tasks.length <= 4
                   ? tasks.map((task) => (
                       <>
-                        <Grid.Column>
+                        <Grid.Column mobile={16} tablet={8} computer={4}>
                           <TaskCard key={task.id} task={task} />
                         </Grid.Column>
                       </>
                     ))
-                  : tasks.slice(0, 5).map((task) => (
+                  : tasks.slice(0, 4).map((task) => (
                       <>
-                        <Grid.Column>
+                        <Grid.Column mobile={16} tablet={8} computer={4}>
                           <TaskCard key={task.id} task={task} />
                         </Grid.Column>
                       </>
@@ -102,7 +103,7 @@ const Dashboard = () => {
               </Grid.Row>
             </Grid>
           </Segment>
-          {tasks.length > 5 ? (
+          {tasks.length > 4 ? (
             <h3 style={{ float: "right" }}>
               <Link href="/tasks/tasks-index">See all tasks</Link>
             </h3>
@@ -110,8 +111,8 @@ const Dashboard = () => {
             <></>
           )}
         </div>
-        <h1>You have {projects.length} open projects</h1>
-        <h1>You have {tasks.length} tasks</h1>
+        <h1>You have {tasks.length} assigned tasks</h1>
+        <Divider />
         <div>
           <DashboardGraphs tasks={tasks}/>
         </div>

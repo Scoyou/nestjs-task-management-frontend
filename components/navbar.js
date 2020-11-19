@@ -12,15 +12,7 @@ const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(false);
 
   return (
-    <Menu 
-    inverted
-    style={{
-      top: '0',
-      zIndex: '100',
-      position: 'fixed',
-      width: '100%'
-    }}
-    >
+    <Menu inverted>
       <Link href="/">
         <Menu.Item header>Tasky McTaskFace</Menu.Item>
       </Link>
