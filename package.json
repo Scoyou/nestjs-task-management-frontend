@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "start:prod": "node dist/src/main.js"
+    
   },
   "dependencies": {
     "@sentry/react": "^5.27.3",
