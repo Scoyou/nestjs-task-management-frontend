@@ -3,6 +3,9 @@ import styles from "../styles/Home.module.css";
 import Cookies from "js-cookie";
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import api from "../services/api";
+import { Card, Grid, Segment } from "semantic-ui-react";
+import Link from "next/link";
+import TaskCard from "../components/TaskCard";
 
 const Dashboard = () => {
   const jwt = Cookies.get("jwt");
@@ -12,10 +15,11 @@ const Dashboard = () => {
   const [loadingTasks, setLoadingTasks] = useState(true);
   const [loadingProjects, setLoadingProjects] = useState(true);
   const [openTasks, setOpenTasks] = useState([]);
-  api.defaults.headers.Authorization = `Bearer ${jwt}`
+  api.defaults.headers.Authorization = `Bearer ${jwt}`;
 
   const fetchTasks = async () => {
-    const res = await api.get('tasks')
+    const res = await api
+      .get("tasks")
       .then((res) => res.data)
       .then((data) => {
         setTasks(data);
@@ -28,7 +32,8 @@ const Dashboard = () => {
   };
 
   const fetchProjects = async () => {
-    const res = await api.get('projects')
+    const res = await api
+      .get("projects")
       .then((res) => res.data)
       .then((data) => {
         setProjects(data);
@@ -65,14 +70,45 @@ const Dashboard = () => {
   });
 
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Welcome, {user}!</h1>
+        <div>
+          <h1 className={styles.title}>Welcome, {user}!</h1>
+          <h2>Recent Tasks</h2>
+          <Segment color="green">
+            <Grid columns={tasks.length < 5 ? tasks.length : 5} divided>
+              <Grid.Row>
+                {tasks.length <= 5
+                  ? tasks.map((task) => (
+                      <>
+                        <Grid.Column>
+                          <TaskCard key={task.id} task={task} />
+                        </Grid.Column>
+                      </>
+                    ))
+                  : tasks.slice(0, 5).map((task) => (
+                      <>
+                        <Grid.Column>
+                          <TaskCard key={task.id} task={task} />
+                        </Grid.Column>
+                      </>
+                    ))}
+              </Grid.Row>
+            </Grid>
+          </Segment>
+          {tasks.length > 5 ? (
+            <h3 style={{ float: "right" }}>
+              <Link href="/tasks/tasks-index">See all tasks</Link>
+            </h3>
+          ) : (
+            <></>
+          )}
+        </div>
         <h1>You have {projects.length} open projects</h1>
         <h1>You have {tasks.length} tasks</h1>
       </main>
