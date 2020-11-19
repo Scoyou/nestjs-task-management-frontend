@@ -25,7 +25,6 @@ const Task = ({ task, refetch }) => {
       <div
         style={{
           width: "100%",
-          borderStyle: "groove",
           height: "100%",
           display: "flex",
         }}
