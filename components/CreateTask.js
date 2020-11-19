@@ -15,7 +15,7 @@ const CreateTaskPage = (props) => {
   const [priority, setPriority] = useState("");
   const [description, setDescription] = useState("");
   const [errors, setErrors] = useState([]);
-  
+
   const jwt = Cookies.get("jwt");
   api.defaults.headers.Authorization = `Bearer ${jwt}`;
 
