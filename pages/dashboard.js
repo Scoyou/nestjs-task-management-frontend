@@ -15,13 +15,12 @@ const Dashboard = () => {
   const [projects, setProjects] = useState([]);
   const [loadingTasks, setLoadingTasks] = useState(true);
   const [loadingProjects, setLoadingProjects] = useState(true);
-  const [openTasks, setOpenTasks] = useState([]);
 
   api.defaults.headers.Authorization = `Bearer ${jwt}`;
 
   const fetchTasks = async () => {
     const res = await api
-      .get('tasks')
+      .get("tasks")
       .then((res) => res.data)
       .then((data) => {
         setTasks(data);
@@ -111,10 +110,14 @@ const Dashboard = () => {
             <></>
           )}
         </div>
-        <h1>You have {tasks.length} assigned tasks</h1>
+        <h1>
+          You have {tasks.filter((t) => t.status === "OPEN").length} open tasks
+          and {tasks.filter((t) => t.priority === "CRITICAL").length} critical
+          tasks
+        </h1>
         <Divider />
         <div>
-          <DashboardGraphs tasks={tasks}/>
+          <DashboardGraphs tasks={tasks} />
         </div>
       </main>
     </div>

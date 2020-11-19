@@ -1,22 +1,60 @@
 import React, { useState } from "react";
 import { Grid, Button, Container, Divider } from "semantic-ui-react";
+import Cookies from "js-cookie";
+import ContentEditable from "react-contenteditable";
+import SunEditor from "suneditor-react";
+import "suneditor/dist/css/suneditor.min.css";
+
 import ProjectBreadcrumb from "./ProjectBreadcrumb";
 import TaskPriorityDropdown from "./TaskPriorityDropdown";
 import TaskStatusDropdown from "./TaskStatusDropdown";
-import CommentsIndex from "./CommentsIndex";
-import Cookies from "js-cookie";
 import api from "../services/api";
+import CommentsIndex from "./CommentsIndex";
 
 const Task = ({ task, refetch }) => {
-  const [editing, setEditing] = useState(false);
+  const [title, setTitle] = useState(task.title);
+  const [timeout, setTimeout] = useState(0);
+  const [editingDescription, setEditingDescription] = useState(false);
+  const [newDescription, setnewDescription] = useState("");
 
   const jwt = Cookies.get("jwt");
   api.defaults.headers.Authorization = `Bearer ${jwt}`;
 
   const deleteTask = async (id) => {
-    const res = await api.delete(`tasks/${id}`).then((res) => {
+    const res = await api.delete(`tasks/${id}`).then(() => {
       refetch();
     });
+  };
+
+  const editTitle = async (id, title) => {
+    const res = await api
+      .patch(`tasks/${id}/title`, { title })
+      .then(() => refetch());
+  };
+
+  const handleTitleChange = (id) => (evt) => {
+    var title = evt.target.value;
+    setTitle(title);
+    if (timeout) clearTimeout(timeout);
+    setTimeout(() => editTitle(id, title), 5000);
+  };
+
+  const updateDescription = async (id, description) => {
+    const res = await api
+      .patch(`tasks/${id}/description`, { description })
+      .then(() => {
+        setEditingDescription(false);
+        refetch();
+      });
+  };
+
+  const handleSubmit = (id, description) => (e) => {
+    e.preventDefault();
+    updateDescription(id, description);
+  };
+
+  const handleClose = () => {
+    setEditingDescription(false);
   };
 
   return (
@@ -25,7 +63,6 @@ const Task = ({ task, refetch }) => {
       <div
         style={{
           width: "100%",
-          borderStyle: "groove",
           height: "100%",
           display: "flex",
         }}
@@ -33,16 +70,40 @@ const Task = ({ task, refetch }) => {
         <Grid style={{ flex: "1" }}>
           <Grid.Row>
             <Grid.Column width={10}>
-              <h2>{task.title}</h2>
+              <h2>
+                <ContentEditable
+                  html={title}
+                  disabled={false}
+                  onChange={handleTitleChange(task.id)}
+                />
+              </h2>
               <Divider />
               <p>
                 <strong>Description:</strong>
               </p>
-              <Container
-                textAlign="justified"
-                dangerouslySetInnerHTML={{ __html: task.description }}
-                style={{ minHeight: "250px" }}
-              ></Container>
+              <Container textAlign="justified" style={{ minHeight: "250px" }}>
+                {!editingDescription && (
+                  <div
+                    dangerouslySetInnerHTML={{ __html: task.description }}
+                    onClick={() => setEditingDescription(true)}
+                    style={{ cursor: "pointer" }}
+                  ></div>
+                )}
+                {editingDescription ? (
+                  <div>
+                    <SunEditor
+                      setContents={task.description}
+                      onChange={(content) => setnewDescription(content)}
+                    />
+                    <Button onClick={handleSubmit(task.id, newDescription)}>
+                      Save
+                    </Button>
+                    <Button onClick={handleClose}>Cancel</Button>
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </Container>
 
               <CommentsIndex key={task.id} task={task} />
             </Grid.Column>
