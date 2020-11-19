@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid, Button } from "semantic-ui-react";
+import { Grid, Button, Container, Divider } from "semantic-ui-react";
 import ProjectBreadcrumb from "./ProjectBreadcrumb";
 import TaskPriorityDropdown from "./TaskPriorityDropdown";
 import TaskStatusDropdown from "./TaskStatusDropdown";
@@ -34,11 +34,12 @@ const Task = ({ task, refetch }) => {
           <Grid.Row>
             <Grid.Column width={10}>
               <h2>{task.title}</h2>
-
-              <div 
-              dangerouslySetInnerHTML={{ __html: task.description }}
-              style={{minHeight: '250px'}}
-              ></div>
+              <Divider />
+              <p><strong>Description:</strong></p>
+              <Container
+                dangerouslySetInnerHTML={{ __html: task.description }}
+                style={{ minHeight: "250px" }}
+              ></Container>
 
               <CommentsIndex key={task.id} task={task} />
             </Grid.Column>
@@ -48,7 +49,7 @@ const Task = ({ task, refetch }) => {
               <TaskStatusDropdown task={task} refetch={refetch} />
               <TaskPriorityDropdown task={task} refetch={refetch} />
 
-              <hr></hr>
+              <Divider />
               <h3>Danger Zone</h3>
               <Button negative onClick={() => deleteTask(task.id)}>
                 Delete Task
