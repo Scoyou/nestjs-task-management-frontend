@@ -6,6 +6,7 @@ import api from "../services/api";
 import { Card, Grid, Segment } from "semantic-ui-react";
 import Link from "next/link";
 import TaskCard from "../components/TaskCard";
+import DashboardGraphs from "../components/DashboardGraphs";
 
 const Dashboard = () => {
   const jwt = Cookies.get("jwt");
@@ -111,6 +112,9 @@ const Dashboard = () => {
         </div>
         <h1>You have {projects.length} open projects</h1>
         <h1>You have {tasks.length} tasks</h1>
+        <div>
+          <DashboardGraphs tasks={tasks}/>
+        </div>
       </main>
     </div>
   );
