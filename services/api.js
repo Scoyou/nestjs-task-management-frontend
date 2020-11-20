@@ -5,7 +5,7 @@ let urls = {
     production: 'https://task-management-backend-sy.herokuapp.com/'
 }
 const api = Axios.create({
-    baseURL: 'https://task-management-backend-sy.herokuapp.com/',
+    baseURL: urls[process.env.NODE_ENV],
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
