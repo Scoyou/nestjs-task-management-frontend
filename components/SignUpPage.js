@@ -42,7 +42,6 @@ const SignUpPage = (props) => {
       trigger={<Button>Sign Up</Button>}
     >
       <Modal.Header>Sign Up</Modal.Header>
-      {console.log(errors)}
       {errors &&
         errors.map((e) => (
           <ul>
